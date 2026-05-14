@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ===== META & CHARSET ===== -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xen/Dev — Premium Digital Studio</title>
+    
+    <!-- ===== FONTS ===== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- ===== MAIN STYLESHEET ===== -->
+    <style>
+        /* ========== RESET & GLOBAL STYLES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #050505;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* ========== BACKGROUND EFFECTS ========== */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(circle at top left, rgba(124, 58, 237, .18), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(59, 130, 246, .15), transparent 30%);
+            z-index: -2;
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, .03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px);
+            background-size: 80px 80px;
+            opacity: .5;
+            z-index: -1;
+        }
+        
+        /* ========== NAVIGATION BAR ========== */
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            padding: 18px 28px;
+            background: rgba(255, 255, 255, .05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 999;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, .35);
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-decoration: none;
+            color: #fff;
+            transition: .3s;
+        }
+        
+        .logo:hover {
+            opacity: .8;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 34px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, .7);
+            transition: .4s;
+            font-size: .95rem;
+        }
+        
+        .nav-links a:hover {
+            color: #fff;
+        }
+        
+        /* ========== BUTTONS ========== */
+        .nav-btn,
+        .primary-btn {
+            padding: 14px 24px;
+            border-radius: 16px;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            font-weight: 700;
+            transition: .4s;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+        
+        .nav-btn:hover,
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, .15);
+        }
+        
+        .secondary-btn {
+            padding: 14px 24px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, .12);
+            background: rgba(255, 255, 255, .05);
+            backdrop-filter: blur(12px);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: .4s;
+            display: inline-block;
+        }
+        
+        .secondary-btn:hover {
+            border-color: rgba(255, 255, 255, .25);
+            background: rgba(255, 255, 255, .08);
+        }
+        
+        /* ========== HERO SECTION ========== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 140px 8%;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 1100px;
+        }
+        
+        .hero-sub {
+            color: #8f8f8f;
+            text-transform: uppercase;
+            letter-spacing: .25em;
+            margin-bottom: 24px;
+        }
+        
+        .hero h1 {
+            font-size: clamp(4rem, 10vw, 8rem);
+            line-height: .95;
+            font-weight: 900;
+            letter-spacing: -.06em;
+            margin-bottom: 30px;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(to right, #fff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            max-width: 760px;
+            margin: auto;
+            color: #9b9b9b;
+            font-size: 1.2rem;
+            line-height: 1.9;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 45px;
+            flex-wrap: wrap;
+        }
+        
+        /* ========== METRICS CARDS ========== */
+        .metrics {
+            margin-top: 70px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+        }
+        
+        .metric-card {
+            padding: 30px;
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 26px;
+            backdrop-filter: blur(18px);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .metric-card:nth-child(2) { animation-delay: 1s; }
+        .metric-card:nth-child(3) { animation-delay: 2s; }
+        .metric-card:nth-child(4) { animation-delay: 3s; }
+        
+        .metric-card h2 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        
+        .metric-card p {
+            color: #8f8f8f;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        
+        /* ========== STANDARD SECTIONS ========== */
+        .section {
+            padding: 140px 8%;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: clamp(3rem, 6vw, 5rem);
+            letter-spacing: -.05em;
+            margin-bottom: 24px;
+        }
+        
+        .section-sub {
+            text-align: center;
+            color: #8b8b8b;
+            max-width: 760px;
+            margin: auto;
+            line-height: 1.9;
+        }
+        
+        /* ========== SERVICES GRID ========== */
+        .services-grid {
+            margin-top: 70px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+        
+        .service-card {
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 30px;
+            padding: 38px;
+            transition: .5s;
+            position: relative;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, .16);
+        }
+        
+        .icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(124, 58, 237, .35), rgba(59, 130, 246, .25));
+            margin-bottom: 28px;
+        }
+        
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 14px;
+        }
+        
+        .service-card p {
+            color: #8f8f8f;
+            line-height: 1.8;
+        }
+        
+        /* ========== WORK/PROJECT SECTION ========== */
+        .work-container {
+            margin-top: 70px;
+            display: grid;
+            gap: 32px;
+        }
+        
+        .work-item {
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 30px;
+            overflow: hidden;
+            transition: .5s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 420px;
+        }
+        
+        .work-item:nth-child(even) {
+            direction: unset;
+        }
+        
+        .work-item:nth-child(even) > * {
+            direction: ltr;
+        }
+        
+        .work-item:hover {
+            border-color: rgba(255, 255, 255, .16);
+            box-shadow: 0 20px 60px rgba(124, 58, 237, .1);
+            background: rgba(255, 255, 255, .06);
+        }
+        
+        .work-item:hover {
+            border-color: rgba(255, 255, 255, .16);
+            box-shadow: 0 20px 60px rgba(124, 58, 237, .1);
+        }
+        
+        .work-image {
+            background: radial-gradient(circle at top left, rgba(124, 58, 237, .35), transparent 40%),
+                        linear-gradient(145deg, #141414, #0a0a0a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .work-image::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(124, 58, 237, .3) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: .7; }
+        }
+        
+        .work-content {
+            padding: 60px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+            width: 100%;
+            max-width: 700px;
+            gap: 16px;
+        }
+        
+        .work-tag {
+            color: #7c3aed;
+            font-size: .85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            margin-bottom: 0;
+            transition: .3s;
+        }
+        
+        .work-content h3 {
+            font-size: 2rem;
+            margin-bottom: 0;
+            letter-spacing: -.02em;
+            transition: .3s;
+        }
+        
+        .work-item:hover .work-content h3 {
+            color: #7c3aed;
+        }
+        
+        .work-content p {
+            color: #a8a8a8;
+            line-height: 1.85;
+            margin-bottom: 0;
+            font-size: 1rem;
+            transition: .3s;
+        }
+        
+        .work-item:hover .work-content p {
+            color: #b8b8b8;
+        }
+        
+        .work-link {
+            color: #7c3aed;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: .3s ease;
+            margin-top: 8px;
+        }
+        
+        .work-link:hover {
+            gap: 14px;
+            color: #fff;
+            transform: translateX(2px);
+        }
+        
+        /* ========== TESTIMONIALS SECTION ========== */
+        .testimonial-grid {
+            margin-top: 70px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        
+        .testimonial-card {
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 30px;
+            padding: 32px;
+            transition: .5s;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, .16);
+        }
+        
+        .avatar {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            margin-bottom: 22px;
+        }
+        
+        .testimonial-card p {
+            color: #b0b0b0;
+            line-height: 1.8;
+        }
+        
+        /* ========== PRICING SECTION ========== */
+        .pricing-grid {
+            margin-top: 70px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        
+        .pricing-card {
+            padding: 42px;
+            border-radius: 32px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .08);
+            transition: .5s;
+        }
+        
+        .pricing-card.featured {
+            background: linear-gradient(145deg, rgba(124, 58, 237, .2), rgba(255, 255, 255, .06));
+            transform: scale(1.03);
+            border-color: rgba(124, 58, 237, .3);
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+        }
+        
+        .price {
+            font-size: 4rem;
+            font-weight: 900;
+            margin: 20px 0;
+        }
+        
+        .pricing-card ul {
+            list-style: none;
+            margin: 24px 0;
+        }
+        
+        .pricing-card li {
+            margin-bottom: 14px;
+            color: #b0b0b0;
+        }
+        
+        .pricing-card .primary-btn {
+            width: 100%;
+            text-align: center;
+            margin-top: 24px;
+        }
+        
+        /* ========== CTA SECTION ========== */
+        .cta {
+            padding: 180px 8%;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: clamp(3rem, 7vw, 6rem);
+            line-height: 1;
+            letter-spacing: -.05em;
+            max-width: 1000px;
+            margin: auto;
+        }
+        
+        .cta p {
+            margin-top: 24px;
+            color: #8f8f8f;
+            font-size: 1.2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+        
+        /* ========== FOOTER ========== */
+        footer {
+            padding: 90px 8%;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        
+        .footer-column h4 {
+            margin-bottom: 18px;
+            font-size: 1rem;
+        }
+        
+        .footer-column a {
+            display: block;
+            color: #8c8c8c;
+            text-decoration: none;
+            margin-bottom: 12px;
+            transition: .3s;
+        }
+        
+        .footer-column a:hover {
+            color: #fff;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .social-links a {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+            transition: .3s;
+            border: 1px solid rgba(255, 255, 255, .12);
+        }
+        
+        .social-links a:hover {
+            background: rgba(124, 58, 237, .3);
+            border-color: rgba(124, 58, 237, .5);
+        }
+        
+        /* ========== RESPONSIVE DESIGN ========== */
+        @media (max-width: 1100px) {
+            .services-grid,
+            .pricing-grid,
+            .testimonial-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .work-item {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+            
+            .work-item:nth-child(even) {
+                direction: ltr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .services-grid,
+            .pricing-grid,
+            .testimonial-grid,
+            .metrics,
+            .footer-grid,
+            .work-item {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-buttons,
+            .cta-buttons {
+                flex-direction: column;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .work-content {
+                padding: 32px;
+            }
+            
+            .work-item h3 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="navbar">
+        <a href="#home" class="logo">Xen/Dev</a>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#work">Work</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#pricing">Pricing</a>
+            <a href="https://github.com/xendevofficial" target="_blank">GitHub</a>
+        </div>
+        <a href="mailto:xendev.official@proton.me" class="nav-btn" target="_blank">Get in Touch</a>
+    </nav>
+ 
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-sub">PREMIUM DIGITAL STUDIO</div>
+            <h1>We Build Digital Experiences <span class="gradient-text">That Feel Years Ahead.</span></h1>
+            <p>We create premium websites, SaaS platforms, mobile apps, and enterprise software for ambitious brands and modern businesses.</p>
+            
+            <div class="hero-buttons">
+                <a href="mailto:xendev.official@proton.me" class="primary-btn" target="_blank">Start a Project</a>
+                <a href="#services" class="secondary-btn">Explore Our Services</a>
+            </div>
+            
+            <!-- METRICS: Update these numbers with your actual stats -->
+            <div class="metrics">
+                <div class="metric-card">
+                    <h2>100+</h2>
+                    <p>Projects Delivered</p>
+                </div>
+                <div class="metric-card">
+                    <h2>98%</h2>
+                    <p>Client Satisfaction</p>
+                </div>
+                <div class="metric-card">
+                    <h2>24/7</h2>
+                    <p>Premium Support</p>
+                </div>
+                <div class="metric-card">
+                    <h2>Global</h2>
+                    <p>Worldwide Clients</p>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- ===== SERVICES SECTION ===== -->
+    <section class="section" id="services">
+        <h2 class="section-title">Premium Services</h2>
+        <p class="section-sub">Award-winning digital experiences crafted for modern startups, companies, luxury brands, and enterprise systems.</p>
+        
+        <div class="services-grid">
+            <!-- SERVICE CARD 1 -->
+            <div class="service-card">
+                <div class="icon"></div>
+                <h3>Premium Websites</h3>
+                <p>Luxury websites designed with cinematic visuals and world-class user experiences.</p>
+            </div>
+            
+            <!-- SERVICE CARD 2 -->
+            <div class="service-card">
+                <div class="icon"></div>
+                <h3>SaaS Platforms</h3>
+                <p>Scalable platforms engineered for modern startups and enterprise businesses.</p>
+            </div>
+            
+            <!-- SERVICE CARD 3 -->
+            <div class="service-card">
+                <div class="icon"></div>
+                <h3>AI Integrations</h3>
+                <p>Intelligent automation systems and AI-powered digital products.</p>
+            </div>
+            
+            <!-- SERVICE CARD 4 -->
+            <div class="service-card">
+                <div class="icon"></div>
+                <h3>Brand Identity</h3>
+                <p>Elegant visual systems that create premium and memorable brands.</p>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- ===== WHAT WE BUILD SECTION ===== -->
+    <section class="section" id="work">
+        <h2 class="section-title">What We Build</h2>
+        <p class="section-sub">We specialize in creating premium digital products and experiences across multiple platforms and technologies.</p>
+        
+        <div class="work-container">
+            <!--PROJECT 1-->
+            <div class="work-item">
+                <div class="work-content">
+                    <div class="work-tag">SaaS & Web Applications</div>
+                    <h3>Full-Stack Platforms</h3>
+                    <p>Scalable SaaS applications and web platforms built with modern technologies. Custom architectures with real-time analytics, user management, advanced integrations, and enterprise-grade security. We handle everything from frontend to deployment.</p>
+                    <a href="https://github.com/xendevofficial" target="_blank" class="work-link">View Code on GitHub →</a>
+                </div>
+            </div>
+            
+            <!--PROJECT 2-->
+            <div class="work-item">
+                <div class="work-content">
+                    <div class="work-tag">E-Commerce & Web Development</div>
+                    <h3>Custom Web Solutions</h3>
+                    <p>Beautiful, high-performance websites and e-commerce platforms designed for conversions. Responsive design, smooth animations, SEO optimization, payment integrations, and mobile-first experiences that look incredible on every device.</p>
+                    <a href="https://github.com/xendevofficial" target="_blank" class="work-link">Explore Projects →</a>
+                </div>
+            </div>
+            
+            <!--PROJECT 3-->
+            <div class="work-item">
+                <div class="work-content">
+                    <div class="work-tag">Brand & Design Systems</div>
+                    <h3>Premium Brand Identity</h3>
+                    <p>Complete brand identity systems and design thinking solutions. Logo design, visual guidelines, design systems, marketing materials, and premium websites that capture your brand's essence and resonate with your audience.</p>
+                    <a href="https://github.com/xendevofficial" target="_blank" class="work-link">See Our Work →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- ===== TESTIMONIALS SECTION ===== -->
+    <section class="section" id="testimonials">
+        <h2 class="section-title">Client Testimonials</h2>
+        <div class="testimonial-grid">
+            <!-- TESTIMONIAL 1 -->
+            <div class="testimonial-card">
+                <div class="avatar"></div>
+                <p>"Xen/Dev transformed our brand into something that feels truly world-class. The attention to detail was exceptional."</p>
+            </div>
+            
+            <!-- TESTIMONIAL 2 -->
+            <div class="testimonial-card">
+                <div class="avatar"></div>
+                <p>"The quality feels closer to Apple than a typical agency website. We've received countless compliments from our clients."</p>
+            </div>
+            
+            <!-- TESTIMONIAL 3 -->
+            <div class="testimonial-card">
+                <div class="avatar"></div>
+                <p>"One of the most premium digital experiences we've ever worked with. Highly recommend!"</p>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- ===== PRICING SECTION ===== -->
+    <section class="section" id="pricing">
+        <h2 class="section-title">Pricing Plans</h2>
+        <p class="section-sub">Flexible premium solutions for startups, businesses, and enterprise clients.</p>
+        
+        <div class="pricing-grid">
+            <!-- PRICING TIER 1: STARTER -->
+            <div class="pricing-card">
+                <h3>Starter</h3>
+                <div class="price">$499</div>
+                <ul>
+                    <li>✓ Premium Landing Page</li>
+                    <li>✓ Responsive Design</li>
+                    <li>✓ SEO Optimization</li>
+                    <li>✓ 3 Revision Rounds</li>
+                </ul>
+                <a href="mailto:xendev.official@proton.me?subject=Starter%20Plan%20Inquiry" class="primary-btn" target="_blank">Get Started</a>
+            </div>
+            
+            <!-- PRICING TIER 2: PROFESSIONAL (FEATURED) -->
+            <div class="pricing-card featured">
+                <h3>Professional</h3>
+                <div class="price">$699</div>
+                <ul>
+                    <li>✓ Full Business Website</li>
+                    <li>✓ Advanced Animations</li>
+                    <li>✓ Premium UI/UX Design</li>
+                    <li>✓ Unlimited Revisions</li>
+                    <li>✓ 30 Days Support</li>
+                </ul>
+                <a href="mailto:xendev.official@proton.me?subject=Professional%20Plan%20Inquiry" class="primary-btn" target="_blank">Most Popular</a>
+            </div>
+            
+            <!-- PRICING TIER 3: ENTERPRISE -->
+            <div class="pricing-card">
+                <h3>Enterprise</h3>
+                <div class="price">Custom</div>
+                <ul>
+                    <li>✓ SaaS Platforms</li>
+                    <li>✓ Enterprise Architecture</li>
+                    <li>✓ Dedicated Team</li>
+                    <li>✓ 90 Days Support</li>
+                </ul>
+                <a href="mailto:xendev.official@proton.me?subject=Enterprise%20Plan%20Inquiry" class="primary-btn" target="_blank">Contact Us</a>
+            </div>
+        </div>
+    </section>
+<footer>
+<div class="footer-grid">
+<div><div class="footer-logo">Xen/Dev</div><p style="color:#8c8c8c;line-height:1.8;max-width:420px">A premium digital studio building next-generation websites, SaaS platforms,and cinematic digital experiences.</p></div>
+
+<div class="footer-column"><h4>Services</h4><a href="#">Web Design</a><a href="#">SaaS</a><a href="#">Branding</a><a href="#">/</a></div>
+<div class="footer-column"><h4>Company</h4><a href="#">About</a><a href="#">Work</a><a href="#">Pricing</a><a href="#">Contact</a></div>
+<!--SOCIALS-->
+<div class="footer-column"><h4>Social</h4>
+    <a href="https://instagram.com/" target="_blank" title="Instagram">Instagram</a>
+    <a href="https://twitter.com/" target="_blank" title="Twitter">Twitter</a>
+    <a href="https://github.com/xendevofficial" target="_blank" title="GitHub">Github</a>
+    <a href="https://discord.com/" target="_blank" title="Discord">Discord</a></div>
+</div>
+</footer>
+</body>
+</html>
