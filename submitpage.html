@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Xen/Dev — Start a Project</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<style>
+:root{
+    --bg:#0a0a0a;
+    --bg-secondary:#141414;
+    --surface:#1a1a1a;
+    --input:#222222;
+    --border:#343434;
+    --border-hover:#4b4b4b;
+    --text:#f5f5f5;
+    --text-secondary:#9d9d9d;
+    --accent:#7c3aed;
+    --accent-hover:#a78bfa;
+    --success:#4ade80;
+    --error:#ff6b6b;
+    --shadow:0 10px 40px rgba(0,0,0,0.45);
+    --radius:10px;
+    --transition:300ms cubic-bezier(.4,0,.2,1);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar{
+    display:none;
+    width:0;
+    height:0;
+}
+
+body{
+    background:
+        radial-gradient(circle at top left, rgba(124,58,237,0.12), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(59,130,246,0.1), transparent 30%),
+        var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height:1.7;
+    letter-spacing:0.3px;
+    min-height:100vh;
+    overflow-x:hidden;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size:60px 60px;
+    pointer-events:none;
+    z-index:-1;
+}
+
+.container{
+    width:min(100%, 1050px);
+    margin:auto;
+    padding:60px 24px 100px;
+}
+
+.hero{
+    margin-bottom:50px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    border:1px solid rgba(124,58,237,0.25);
+    background:rgba(124,58,237,0.1);
+    padding:10px 16px;
+    border-radius:999px;
+    color:var(--accent);
+    font-size:13px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-bottom:28px;
+    backdrop-filter:blur(10px);
+}
+
+.badge::before{
+    content:"";
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 12px var(--accent);
+}
+
+.hero h1{
+    font-size:clamp(3rem, 7vw, 5.5rem);
+    line-height:1;
+    letter-spacing:-2px;
+    margin-bottom:24px;
+    font-weight:800;
+}
+
+.hero p{
+    max-width:720px;
+    color:var(--text-secondary);
+    font-size:1.15rem;
+}
+
+.hero-divider{
+    width:140px;
+    height:1px;
+    background:linear-gradient(to right, var(--accent), transparent);
+    margin-top:40px;
+}
+
+.form-shell{
+    background:rgba(20,20,20,0.92);
+    border:1px solid rgba(255,255,255,0.05);
+    border-radius:28px;
+    padding:55px;
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(18px);
+    position:relative;
+    overflow:hidden;
+}
+
+.form-shell::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:1px;
+    background:linear-gradient(to right, transparent, rgba(124,58,237,0.5), transparent);
+}
+
+.progress{
+    display:flex;
+    gap:10px;
+    margin-bottom:50px;
+}
+
+.progress span{
+    flex:1;
+    height:4px;
+    border-radius:999px;
+    background:#222;
+    overflow:hidden;
+    position:relative;
+}
+
+.progress span.active::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg, var(--accent), #a78bfa);
+}
+
+.section{
+    margin-bottom:50px;
+}
+
+.section-header{
+    margin-bottom:28px;
+}
+
+.section-tag{
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:1.2px;
+    font-size:12px;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.section-title{
+    font-size:1.7rem;
+    margin-bottom:10px;
+    font-weight:700;
+}
+
+.section-description{
+    color:var(--text-secondary);
+    max-width:650px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:24px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.field.full{
+    grid-column:1 / -1;
+}
+
+label{
+    font-size:14px;
+    font-weight:600;
+    color:var(--text);
+    letter-spacing:0.3px;
+}
+
+.required{
+    color:var(--accent);
+    margin-left:3px;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    background:var(--input);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:16px 18px;
+    border-radius:var(--radius);
+    font-size:16px;
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        transform var(--transition);
+    outline:none;
+}
+
+textarea{
+    resize:vertical;
+    min-height:120px;
+}
+
+input::placeholder,
+textarea::placeholder{
+    color:#7d7d7d;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(124,58,237,0.15);
+    transform:translateY(-1px);
+}
+
+.checkbox-wrapper{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    margin-bottom:34px;
+}
+
+.checkbox-wrapper input{
+    width:20px;
+    height:20px;
+    margin-top:2px;
+    accent-color:var(--accent);
+}
+
+.checkbox-wrapper label{
+    color:var(--text-secondary);
+    line-height:1.6;
+    font-weight:400;
+}
+
+.actions{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+button{
+    border:none;
+    outline:none;
+    cursor:pointer;
+    transition:all var(--transition);
+}
+
+.primary-btn{
+    background:linear-gradient(135deg, var(--accent), #a78bfa);
+    color:#fff;
+    padding:16px 34px;
+    font-size:16px;
+    font-weight:700;
+    border-radius:12px;
+    letter-spacing:0.5px;
+    min-width:240px;
+    position:relative;
+    overflow:hidden;
+}
+
+.primary-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 30px rgba(124,58,237,0.3);
+}
+
+.primary-btn:active{
+    transform:translateY(0);
+}
+
+.secondary-link{
+    color:var(--text-secondary);
+    text-decoration:none;
+    font-size:16px;
+    font-weight:600;
+    transition:color var(--transition);
+    padding:16px 24px;
+    border-radius:12px;
+}
+
+.secondary-link:hover{
+    color:var(--accent);
+}
+
+.field.invalid input,
+.field.invalid textarea,
+.field.invalid select{
+    border-color:var(--error);
+    box-shadow:0 0 0 3px rgba(255,107,107,0.1);
+}
+
+.error-text{
+    font-size:13px;
+    color:var(--error);
+    display:none;
+    margin-top:6px;
+}
+
+.field.invalid .error-text{
+    display:block;
+}
+
+.loading{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    gap:16px;
+    margin-top:32px;
+}
+
+.spinner{
+    width:32px;
+    height:32px;
+    border:3px solid rgba(124,58,237,0.2);
+    border-top-color:var(--accent);
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.message{
+    padding:20px 24px;
+    border-radius:12px;
+    margin-top:24px;
+    display:none;
+    font-weight:600;
+}
+
+.message.success{
+    background:rgba(74,222,128,0.12);
+    border:1px solid rgba(74,222,128,0.3);
+    color:#86efac;
+}
+
+.message.error{
+    background:rgba(255,107,107,0.12);
+    border:1px solid rgba(255,107,107,0.3);
+    color:#fca5a5;
+}
+
+.footer-note{
+    text-align:center;
+    color:var(--text-secondary);
+    font-size:14px;
+    margin-top:60px;
+    padding-bottom:40px;
+}
+
+.footer-note strong{
+    color:var(--accent);
+}
+
+@media (max-width:768px){
+    .container{
+        padding:40px 16px 60px;
+    }
+
+    .form-shell{
+        padding:32px 20px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .primary-btn{
+        min-width:auto;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="hero">
+        <h1>Start a Project</h1>
+        <p>
+            Tell us about your vision. 
+            We design cinematic digital experiences, world-class products, and premium platforms engineered to stand years ahead.
+        </p>
+        <div class="hero-divider"></div>
+    </div>
+
+    <div class="form-shell">
+
+        <form id="projectForm" method="POST">
+
+            <!-- PROJECT DETAILS -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-tag">Project Overview</div>
+                    <h2 class="section-title">Tell us about your project</h2>
+                </div>
+
+                <div class="grid">
+
+                    <div class="field">
+                        <label>
+                            Project Name
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="projectName"
+                            placeholder="My Amazing Project"
+                            required
+                        />
+
+                        <span class="error-text">
+                            Please enter a project name.
+                        </span>
+                    </div>
+
+                    <div class="field">
+                        <label>
+                            Project Type
+                            <span class="required">*</span>
+                        </label>
+
+                        <select name="projectType" required>
+                            <option value="">Select project type</option>
+                            <option>Website</option>
+                            <option>Web Application</option>
+                            <option>Mobile App</option>
+                            <option>Branding & Design</option>
+                            <option>Digital Product</option>
+                            <option>Other</option>
+                        </select>
+
+                        <span class="error-text">
+                            Please select a project type.
+                        </span>
+                    </div>
+
+                    <div class="field full">
+                        <label>
+                            Project Description
+                            <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            name="projectDescription"
+                            placeholder="Describe your project, goals, and vision..."
+                            required
+                        ></textarea>
+
+                        <span class="error-text">
+                            Please describe your project.
+                        </span>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- CLIENT DETAILS -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-tag">Your Information</div>
+                    <h2 class="section-title">Who are we working with?</h2>
+                </div>
+
+                <div class="grid">
+
+                    <div class="field">
+                        <label>
+                            Full Name
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="fullName"
+                            placeholder="Your name"
+                            required
+                        />
+
+                        <span class="error-text">
+                            Please enter your name.
+                        </span>
+                    </div>
+
+                    <div class="field">
+                        <label>
+                            Email Address
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="your@email.com"
+                            required
+                        />
+
+                        <span class="error-text">
+                            Please enter a valid email.
+                        </span>
+                    </div>
+
+                    <div class="field">
+                        <label>Company Name</label>
+
+                        <input
+                            type="text"
+                            name="company"
+                            placeholder="Company name (optional)"
+                        />
+                    </div>
+
+                    <div class="field">
+                        <label>Phone Number</label>
+
+                        <input
+                            type="tel"
+                            name="phone"
+                            placeholder="+1 (555) 000-0000"
+                        />
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- PROJECT DETAILS -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-tag">Project Details</div>
+                    <h2 class="section-title">Budget & Timeline</h2>
+                </div>
+
+                <div class="grid">
+
+                    <div class="field">
+                        <label>
+                            Budget Range
+                            <span class="required">*</span>
+                        </label>
+
+                        <select name="budget" required>
+                            <option value="">Select budget range</option>
+                            <option>Under $5K</option>
+                            <option>$5K - $10K</option>
+                            <option>$10K - $25K</option>
+                            <option>$25K - $50K</option>
+                            <option>$50K+</option>
+                            <option>Not sure yet</option>
+                        </select>
+
+                        <span class="error-text">
+                            Please select a budget range.
+                        </span>
+                    </div>
+
+                    <div class="field">
+                        <label>
+                            Timeline
+                            <span class="required">*</span>
+                        </label>
+
+                        <select name="timeline" required>
+                            <option value="">Select timeline</option>
+                            <option>ASAP (0-2 weeks)</option>
+                            <option>1-2 months</option>
+                            <option>2-3 months</option>
+                            <option>3+ months</option>
+                            <option>Flexible</option>
+                        </select>
+
+                        <span class="error-text">
+                            Please select a timeline.
+                        </span>
+                    </div>
+
+                    <div class="field full">
+                        <label>
+                            How did you find us?
+                        </label>
+
+                        <select name="source">
+                            <option value="">Select an option</option>
+                            <option>Google</option>
+                            <option>GitHub</option>
+                            <option>Referral</option>
+                            <option>Social Media</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- NOTES -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-tag">Additional Notes</div>
+                    <h2 class="section-title">Anything else?</h2>
+                </div>
+
+                <div class="field">
+                    <label>Additional Notes</label>
+
+                    <textarea
+                        name="notes"
+                        placeholder="Anything else you'd like us to know? Links to competitors, inspiration, or specific features..."
+                        style="min-height:110px;"
+                    ></textarea>
+                </div>
+            </section>
+
+            <!-- CONSENT -->
+            <section class="section" style="margin-bottom:0;">
+
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="consent" required />
+
+                    <label for="consent">
+                        I agree to be contacted about my project and understand
+                        that Xen/Dev will review my inquiry and respond within 24 hours.
+                    </label>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="primary-btn">
+                        Submit
+                    </button>
+
+                    <a
+                        href="mailto:xendev.official@proton.me"
+                        class="secondary-link"
+                    >
+                        Or email us directly
+                    </a>
+                </div>
+
+                <div class="loading" id="loadingState">
+                    <div class="spinner"></div>
+                    <span>Sending your project details...</span>
+                </div>
+
+                <div class="message success" id="successMessage">
+                    Thank you! We'll review your project and reach out within 24 hours.
+                </div>
+
+                <div class="message error" id="errorMessage">
+                    Something went wrong. Please try again or contact us directly.
+                </div>
+
+            </section>
+
+        </form>
+
+    </div>
+
+    <div class="footer-note">
+        Crafted by <strong>Xen/Dev</strong> — cinematic digital experiences engineered for the future.
+    </div>
+
+</div>
+
+<script>
+const form = document.getElementById("projectForm");
+const fields = document.querySelectorAll("input[required], textarea[required], select[required]");
+const successMessage = document.getElementById("successMessage");
+const errorMessage = document.getElementById("errorMessage");
+const loadingState = document.getElementById("loadingState");
+
+function validateEmail(email){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validateField(field){
+    const wrapper = field.closest(".field");
+
+    if(field.type === "email"){
+        if(!validateEmail(field.value.trim())){
+            wrapper?.classList.add("invalid");
+            return false;
+        }
+    }
+
+    if(!field.value.trim()){
+        wrapper?.classList.add("invalid");
+        return false;
+    }
+
+    wrapper?.classList.remove("invalid");
+    return true;
+}
+
+fields.forEach(field => {
+    field.addEventListener("blur", () => validateField(field));
+
+    field.addEventListener("input", () => {
+        if(field.closest(".field")?.classList.contains("invalid")){
+            validateField(field);
+        }
+    });
+});
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    let isValid = true;
+
+    fields.forEach(field => {
+        if(!validateField(field)){
+            isValid = false;
+        }
+    });
+
+    if(!isValid) return;
+
+    successMessage.style.display = "none";
+    errorMessage.style.display = "none";
+    loadingState.style.display = "flex";
+
+    const formData = new FormData(form);
+
+    const payload = {
+        "Project Name": formData.get("projectName"),
+        "Project Type": formData.get("projectType"),
+        "Project Description": formData.get("projectDescription"),
+        "Full Name": formData.get("fullName"),
+        "Email Address": formData.get("email"),
+        "Company Name": formData.get("company"),
+        "Phone Number": formData.get("phone"),
+        "Budget Range": formData.get("budget"),
+        "Timeline": formData.get("timeline"),
+        "How did you find us": formData.get("source"),
+        "Additional Notes": formData.get("notes"),
+        "_subject": "🎨 New Project Submission - " + formData.get("fullName"),
+        "_captcha": "false"
+    };
+
+    try{
+        // Using FormSubmit.co - automatically sends to your email
+        const response = await fetch(
+            "https://formspree.io/f/mbdwvvon",
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(payload)
+            }
+        );
+
+        loadingState.style.display = "none";
+        successMessage.style.display = "block";
+        form.reset();
+
+        setTimeout(() => {
+            window.scrollTo({
+                top:0,
+                behavior:"smooth"
+            });
+        }, 500);
+
+    }catch(error){
+        loadingState.style.display = "none";
+        errorMessage.style.display = "block";
+        console.error("Form submission error:", error);
+    }
+});
+</script>
+
+</body>
+</html>
