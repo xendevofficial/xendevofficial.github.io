@@ -4,7 +4,7 @@
     <!-- ===== META & CHARSET ===== -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Xen/Dev — Premium Digital Studio</title>
+    <title>Xen/Dev</title>
     
     <!-- ===== FONTS ===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,6 +21,18 @@
         
         html {
             scroll-behavior: smooth;
+        }
+        
+        /* Hide scrollbars across browsers */
+        html, body, * {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+
+        /* Chrome, Safari and Opera */
+        *::-webkit-scrollbar {
+            width: 0;
+            height: 0;
         }
         
         body {
